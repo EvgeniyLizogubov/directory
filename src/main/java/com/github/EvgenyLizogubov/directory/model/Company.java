@@ -1,5 +1,6 @@
 package com.github.EvgenyLizogubov.directory.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -9,6 +10,7 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -39,5 +41,6 @@ public class Company {
     
     @ManyToMany(mappedBy = "companies")
     @NotNull
-    private Set<Heading> headings;
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private List<Heading> headings;
 }

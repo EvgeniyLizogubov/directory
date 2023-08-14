@@ -23,18 +23,19 @@ public class Heading {
     @NotBlank
     private String name;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_heading_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "parent_id")
     @JsonIgnore
-    private Heading parentHeading;
+    private Heading parent;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "root_heading_id")
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "root_id")
+//    @JsonIgnore
+//    private Heading root;
+    
+    @OneToMany(mappedBy = "parent")
     @JsonIgnore
-    private Heading rootHeading;
-    
-    @Transient
-    private List<Heading> children = new ArrayList<>();
+    private List<Heading> children;
     
     @ManyToMany
     @JoinTable(
@@ -42,5 +43,22 @@ public class Heading {
             joinColumns = @JoinColumn(name = "heading_id"),
             inverseJoinColumns = @JoinColumn(name = "company_id")
     )
+    @JsonIgnore
     private List<Company> companies;
+    
+    @JsonIgnore
+    public List<Heading> getAllChildren() {
+        return getAllChildren(this);
+    }
+
+    private List<Heading> getAllChildren(Heading heading) {
+        List<Heading> allChildren = new ArrayList<>();
+
+        for (Heading child : heading.getChildren()) {
+            allChildren.add(child);
+            allChildren.addAll(getAllChildren(child));
+        }
+
+        return allChildren;
+    }
 }

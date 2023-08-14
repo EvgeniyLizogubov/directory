@@ -1,5 +1,6 @@
 package com.github.EvgenyLizogubov.directory.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -24,5 +25,6 @@ public class Coordinates {
     @OneToOne
     @JoinColumn(name = "building_id", referencedColumnName = "id")
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
     private Building building;
 }
