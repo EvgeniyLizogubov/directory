@@ -5,8 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -17,6 +16,9 @@ import java.util.Set;
 @Table(name = "company")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +29,7 @@ public class Company {
     @Size(min = 1, max = 200)
     private String name;
     
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "company_phone_number", joinColumns = @JoinColumn(name = "company_id"))
     @Column(name = "phone_number")
     @JoinColumn(name = "company_id")
@@ -39,7 +41,7 @@ public class Company {
     @NotNull
     private Building building;
     
-    @ManyToMany(mappedBy = "companies")
+    @ManyToMany(mappedBy = "companies", fetch = FetchType.EAGER)
     @NotNull
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private List<Heading> headings;

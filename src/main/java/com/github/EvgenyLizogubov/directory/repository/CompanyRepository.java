@@ -10,10 +10,10 @@ import java.util.Optional;
 
 @Transactional(readOnly = true)
 public interface CompanyRepository extends JpaRepository<Company, Integer> {
-    @Query("SELECT c FROM Company c WHERE c.building.address=:address")
+    @Query("SELECT c FROM Company c WHERE c.building.address=:address ORDER BY c.name ASC")
     List<Company> findAllByBuilding(String address);
     
-    @Query("SELECT c FROM Company c JOIN FETCH c.headings h WHERE h.name=:headingName")
+    @Query("SELECT c FROM Company c JOIN c.headings h WHERE h.name=:headingName ORDER BY c.name ASC")
     List<Company> findAllByHeading(String headingName);
     
     @Query("SELECT c FROM Company c WHERE c.name=:name")

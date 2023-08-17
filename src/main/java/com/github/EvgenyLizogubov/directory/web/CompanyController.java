@@ -42,9 +42,9 @@ public class CompanyController {
     }
     
     @GetMapping("/heading")
-    public List<Company> getAllByHeading(@RequestParam String headingName) {
-        log.info("getAllByHeading with heading name = {}", headingName);
-        return companyRepository.findAllByHeading(headingName);
+    public List<Company> getAllByHeading(@RequestParam String heading) {
+        log.info("getAllByHeading for {}", heading);
+        return companyRepository.findAllByHeading(heading);
     }
     
     @GetMapping("/in-area")

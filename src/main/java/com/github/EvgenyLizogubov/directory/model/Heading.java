@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +15,8 @@ import java.util.List;
 @Table(name = "heading")
 @Setter
 @Getter
+@NoArgsConstructor
+@ToString
 public class Heading {
     @Id
     @Column(name = "heading_id")
@@ -27,11 +31,6 @@ public class Heading {
     @JoinColumn(name = "parent_id")
     @JsonIgnore
     private Heading parent;
-    
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "root_id")
-//    @JsonIgnore
-//    private Heading root;
     
     @OneToMany(mappedBy = "parent")
     @JsonIgnore
@@ -60,5 +59,11 @@ public class Heading {
         }
 
         return allChildren;
+    }
+    
+    public Heading(Integer id, String name, Heading parent) {
+        this.id = id;
+        this.name = name;
+        this.parent = parent;
     }
 }

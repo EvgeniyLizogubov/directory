@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -12,6 +14,8 @@ import org.hibernate.annotations.OnDeleteAction;
 @Table(name = "coordinates")
 @Setter
 @Getter
+@NoArgsConstructor
+@ToString
 public class Coordinates {
     @Column(name = "x", nullable = false, updatable = false)
     @NotNull
@@ -27,4 +31,9 @@ public class Coordinates {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Building building;
+    
+    public Coordinates(Integer x, Integer y) {
+        this.x = x;
+        this.y = y;
+    }
 }
