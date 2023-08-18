@@ -16,10 +16,15 @@ spring:
     username: sa
     password:
 
+  cache:
+    cache-names: companies
+    caffeine.spec: maximumSize=5000,expireAfterAccess=600s
+
 logging:
   level:
     org.springframework.orm.jpa: DEBUG
     org.springframework.transaction: DEBUG
+    org.springframework.cache: TRACE
 
 server.servlet:
   encoding:

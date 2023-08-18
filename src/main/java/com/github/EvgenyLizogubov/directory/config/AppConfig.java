@@ -8,6 +8,7 @@ import com.github.EvgenyLizogubov.directory.util.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.h2.tools.Server;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.ProblemDetail;
@@ -19,6 +20,7 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 
 @Configuration
+@EnableCaching
 @Slf4j
 public class AppConfig {
     @Bean(initMethod = "start", destroyMethod = "stop")

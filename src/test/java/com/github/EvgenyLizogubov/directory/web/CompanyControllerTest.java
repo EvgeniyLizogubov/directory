@@ -1,29 +1,20 @@
 package com.github.EvgenyLizogubov.directory.web;
 
-import com.github.EvgenyLizogubov.directory.repository.CompanyRepository;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.util.List;
-import java.util.Map;
 
 import static com.github.EvgenyLizogubov.directory.web.CompanyTestData.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WithUserDetails("user")
 public class CompanyControllerTest extends AbstractControllerTest {
-    private final String REST_URL = "/api/company";
-    private final String REST_URL_SLASH = "/api/company" + "/";
-    
-    @Autowired
-    private CompanyRepository companyRepository;
+    private final String REST_URL_SLASH = "/api/company/";
     
     @Test
     void get() throws Exception {

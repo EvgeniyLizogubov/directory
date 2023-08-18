@@ -7,6 +7,8 @@ import com.github.EvgenyLizogubov.directory.repository.CompanyRepository;
 import com.github.EvgenyLizogubov.directory.repository.HeadingRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,30 +26,35 @@ public class CompanyController {
     private final HeadingRepository headingRepository;
     
     @GetMapping("/{id}")
+    @Cacheable("companies")
     public ResponseEntity<Company> get(@PathVariable int id) {
         log.info("get id = {}", id);
         return ResponseEntity.of(companyRepository.findById(id));
     }
     
     @GetMapping("/by-name")
+    @Cacheable("companies")
     public ResponseEntity<Company> getByName(@RequestParam String name) {
         log.info("getByName for name = {}", name);
         return ResponseEntity.of(companyRepository.findByName(name));
     }
     
     @GetMapping("/building")
+    @Cacheable("companies")
     public List<Company> getAllByBuilding(@RequestParam String address) {
         log.info("getAllByBuilding for address = {}", address);
         return companyRepository.findAllByBuilding(address);
     }
     
     @GetMapping("/heading")
+    @Cacheable("companies")
     public List<Company> getAllByHeading(@RequestParam String heading) {
         log.info("getAllByHeading for {}", heading);
         return companyRepository.findAllByHeading(heading);
     }
     
     @GetMapping("/in-area")
+    @Cacheable("companies")
     public List<Company> getAllInArea(@RequestParam int x,
                                       @RequestParam int y,
                                       @RequestParam int radius) {
@@ -61,6 +68,7 @@ public class CompanyController {
     }
     
     @GetMapping("/by-name-and-heading")
+    @Cacheable("companies")
     public Set<Company> getAllByNameAndHeading(@RequestParam String companyName,
                                                 @RequestParam String headingName) {
         log.info("getAllByNameAndHeading for companyName = {} and headingName = {}", companyName, headingName);
