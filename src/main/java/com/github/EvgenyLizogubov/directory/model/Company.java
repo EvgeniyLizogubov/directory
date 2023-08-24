@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "company")
+@Table(name = "company", uniqueConstraints = @UniqueConstraint(columnNames = {"name", "building_id"}, name = "uk_company"))
 @Getter
 @Setter
 @NoArgsConstructor
@@ -43,6 +43,5 @@ public class Company {
     
     @ManyToMany(mappedBy = "companies", fetch = FetchType.EAGER)
     @NotNull
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private List<Heading> headings;
 }

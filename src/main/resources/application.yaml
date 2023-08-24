@@ -1,8 +1,8 @@
 spring:
   jpa:
     hibernate:
-      ddl-auto: create
-    defer-datasource-initialization: true
+      ddl-auto: validate
+#    defer-datasource-initialization: true
     show-sql: true
     properties:
       hibernate:
@@ -20,11 +20,15 @@ spring:
     cache-names: companies
     caffeine.spec: maximumSize=5000,expireAfterAccess=600s
 
+  liquibase:
+    change-log: "classpath:db/changelog.sql"
+
 logging:
   level:
     org.springframework.orm.jpa: DEBUG
     org.springframework.transaction: DEBUG
     org.springframework.cache: TRACE
+    liquibase: DEBUG
 
 server.servlet:
   encoding:

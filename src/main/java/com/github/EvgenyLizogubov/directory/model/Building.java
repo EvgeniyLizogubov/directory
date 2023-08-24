@@ -22,7 +22,7 @@ public class Building {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     
-    @Column(name = "building_address", nullable = false, unique = true, updatable = false)
+    @Column(name = "address", nullable = false, unique = true, updatable = false)
     @NotBlank
     private String address;
     

@@ -8,6 +8,8 @@ import org.springframework.util.MultiValueMap;
 
 import java.util.List;
 
+import static com.github.EvgenyLizogubov.directory.web.BuildingTestData.building1;
+import static com.github.EvgenyLizogubov.directory.web.BuildingTestData.building2;
 import static com.github.EvgenyLizogubov.directory.web.CompanyTestData.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -28,7 +30,7 @@ public class CompanyControllerTest extends AbstractControllerTest {
     @Test
     void getByName() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL_SLASH + "by-name")
-                .param("name", "Coca-cola"))
+                .param("name", coca.getName()))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -38,7 +40,7 @@ public class CompanyControllerTest extends AbstractControllerTest {
     @Test
     void getAllByBuilding() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL_SLASH + "building")
-                .param("address", "ул. Ленина, д. 666"))
+                .param("address", building2.getAddress()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(COMPANY_MATCHER.contentJson(ochakovo, pepsi));
@@ -47,7 +49,7 @@ public class CompanyControllerTest extends AbstractControllerTest {
     @Test
     void getAllByHeading() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL_SLASH + "heading")
-                .param("heading", "Напитки"))
+                .param("heading", napitki.getName()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(COMPANY_MATCHER.contentJson(List.of(coca)));
@@ -56,24 +58,32 @@ public class CompanyControllerTest extends AbstractControllerTest {
     @Test
     void getAllInArea() throws Exception {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("x", "100");
-        params.add("y", "100");
-        params.add("radius", "250");
+        params.add("x", building1.getCoordinates().getX().toString());
+        params.add("y", building1.getCoordinates().getY().toString());
+        params.add("radius", "170");
         
         perform(MockMvcRequestBuilders.get(REST_URL_SLASH + "in-area")
                 .params(params))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(COMPANY_MATCHER.contentJson(coca, pepsi, ochakovo));
+                .andExpect(COMPANY_MATCHER.contentJson(coca, ochakovo, pepsi));
     }
     
     @Test
     void getAllByNameAndHeading() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL_SLASH + "by-name-and-heading")
-                .param("companyName", "Ochakovo")
-                .param("headingName", "Напитки"))
+                .param("companyName", ochakovo.getName())
+                .param("headingName", napitki.getName()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(COMPANY_MATCHER.contentJson(List.of(ochakovo)));
+    }
+    
+    @Test
+    void getAllByNameAndHeadingNotFount() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + "by-name-and-heading")
+                .param("companyName", ochakovo.getName())
+                .param("headingName", "NotFound"))
+                .andExpect(status().isNotFound());
     }
 }
