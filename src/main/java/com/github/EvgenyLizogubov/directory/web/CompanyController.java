@@ -55,15 +55,15 @@ public class CompanyController {
     
     @GetMapping("/in-area")
     @Cacheable("companies")
-    public List<Company> getAllInArea(@RequestParam int x,
-                                      @RequestParam int y,
+    public List<Company> getAllInArea(@RequestParam int xCoor,
+                                      @RequestParam int yCoor,
                                       @RequestParam int radius) {
-        log.info("getAllInArea for x = {}, y = {}, radius = {}", x, y, radius);
+        log.info("getAllInArea for x = {}, y = {}, radius = {}", xCoor, yCoor, radius);
         List<Company> companies = companyRepository.findAll(Sort.by("name"));
         return companies.stream().filter(company -> {
             int companyX = company.getBuilding().getCoordinates().getX();
             int companyY = company.getBuilding().getCoordinates().getY();
-            return Math.pow(companyX - x, 2) + Math.pow(companyY - y, 2) <= Math.pow(radius, 2);
+            return Math.pow(companyX - xCoor, 2) + Math.pow(companyY - yCoor, 2) <= Math.pow(radius, 2);
         }).toList();
     }
     
