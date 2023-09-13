@@ -2,7 +2,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
-#    defer-datasource-initialization: true
+    #    defer-datasource-initialization: true
     show-sql: true
     properties:
       hibernate:
@@ -28,12 +28,15 @@ logging:
     org.springframework.orm.jpa: DEBUG
     org.springframework.transaction: DEBUG
     org.springframework.cache: TRACE
+    org.springframework.web: TRACE
     liquibase: DEBUG
 
-server.servlet:
-  encoding:
-    charset: UTF-8
-    enabled: true
-    force: true
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  forward-headers-strategy: framework
 
 springdoc.swagger-ui.path: /
