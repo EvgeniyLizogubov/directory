@@ -17,13 +17,13 @@ import org.hibernate.annotations.OnDeleteAction;
 @NoArgsConstructor
 @ToString
 public class Coordinates {
-    @Column(name = "x", nullable = false, updatable = false)
+    @Column(name = "latitude", nullable = false, updatable = false)
     @NotNull
-    private Integer x;
+    private Integer latitude;
     
-    @Column(name = "y", nullable = false, updatable = false)
+    @Column(name = "longitude", nullable = false, updatable = false)
     @NotNull
-    private Integer y;
+    private Integer longitude;
     
     @Id
     @OneToOne
@@ -32,8 +32,8 @@ public class Coordinates {
     @JsonIgnore
     private Building building;
     
-    public Coordinates(Integer x, Integer y) {
-        this.x = x;
-        this.y = y;
+    public Coordinates(Integer latitude, Integer longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 }

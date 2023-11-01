@@ -6,16 +6,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Transactional(readOnly = true)
 public interface CompanyRepository extends JpaRepository<Company, Integer> {
-    @Query("SELECT c FROM Company c WHERE c.building.address=:address ORDER BY c.name ASC")
-    List<Company> findAllByBuilding(String address);
+    @Query("SELECT c FROM Company c WHERE c.building.id=:buildingId ORDER BY c.name ASC")
+    List<Company> findAllByBuildingId(Integer buildingId);
     
     @Query("SELECT c FROM Company c JOIN c.headings h WHERE h.name=:headingName ORDER BY c.name ASC")
     List<Company> findAllByHeading(String headingName);
     
-    @Query("SELECT c FROM Company c WHERE c.name=:name")
-    Optional<Company> findByName(String name);
+    @Query("SELECT c FROM Company c WHERE c.name LIKE %:name%")
+    List<Company> findByNameLike(String name);
 }

@@ -28,19 +28,19 @@ public class CompanyControllerTest extends AbstractControllerTest {
     }
     
     @Test
-    void getByName() throws Exception {
+    void getByNameLike() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL_SLASH + "by-name")
                 .param("name", coca.getName()))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(COMPANY_MATCHER.contentJson(coca));
+                .andExpect(COMPANY_MATCHER.contentJson(List.of(coca)));
     }
     
     @Test
-    void getAllByBuilding() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + "building")
-                .param("address", building2.getAddress()))
+    void getAllByBuildingId() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + "by-building-id")
+                .param("buildingId", building2.getId().toString()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(COMPANY_MATCHER.contentJson(ochakovo, pepsi));
@@ -56,17 +56,32 @@ public class CompanyControllerTest extends AbstractControllerTest {
     }
     
     @Test
-    void getAllInArea() throws Exception {
+    void getAllInCircleArea() throws Exception {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("xCoor", building1.getCoordinates().getX().toString());
-        params.add("yCoor", building1.getCoordinates().getY().toString());
+        params.add("latitude", building1.getCoordinates().getLatitude().toString());
+        params.add("longitude", building1.getCoordinates().getLongitude().toString());
         params.add("radius", "170");
         
-        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + "in-area")
+        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + "in-circle-area")
                 .params(params))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(COMPANY_MATCHER.contentJson(coca, ochakovo, pepsi));
+    }
+    
+    @Test
+    void getAllInRectangleArea() throws Exception {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("point1Latitude", String.valueOf(building2.getCoordinates().getLatitude() - 1));
+        params.add("point1Longitude", String.valueOf(building2.getCoordinates().getLongitude() - 1));
+        params.add("point2Latitude", String.valueOf(building2.getCoordinates().getLatitude() + 1));
+        params.add("point2Longitude", String.valueOf(building2.getCoordinates().getLongitude() + 1));
+        
+        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + "in-rectangle-area")
+                .params(params))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(COMPANY_MATCHER.contentJson(ochakovo, pepsi));
     }
     
     @Test

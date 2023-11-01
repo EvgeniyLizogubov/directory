@@ -34,16 +34,16 @@ public class CompanyController {
     
     @GetMapping("/by-name")
     @Cacheable("companies")
-    public ResponseEntity<Company> getByName(@RequestParam String name) {
+    public List<Company> getByNameLike(@RequestParam String name) {
         log.info("getByName for name = {}", name);
-        return ResponseEntity.of(companyRepository.findByName(name));
+        return companyRepository.findByNameLike(name);
     }
     
-    @GetMapping("/building")
+    @GetMapping("/by-building-id")
     @Cacheable("companies")
-    public List<Company> getAllByBuilding(@RequestParam String address) {
-        log.info("getAllByBuilding for address = {}", address);
-        return companyRepository.findAllByBuilding(address);
+    public List<Company> getAllByBuildingId(@RequestParam Integer buildingId) {
+        log.info("getAllByBuildingId for buildingId = {}", buildingId);
+        return companyRepository.findAllByBuildingId(buildingId);
     }
     
     @GetMapping("/heading")
@@ -53,24 +53,40 @@ public class CompanyController {
         return companyRepository.findAllByHeading(heading);
     }
     
-    @GetMapping("/in-area")
+    @GetMapping("/in-circle-area")
     @Cacheable("companies")
-    public List<Company> getAllInArea(@RequestParam int xCoor,
-                                      @RequestParam int yCoor,
-                                      @RequestParam int radius) {
-        log.info("getAllInArea for x = {}, y = {}, radius = {}", xCoor, yCoor, radius);
+    public List<Company> getAllInCircleArea(@RequestParam int latitude,
+                                            @RequestParam int longitude,
+                                            @RequestParam int radius) {
+        log.info("getAllInArea for x = {}, y = {}, radius = {}", latitude, longitude, radius);
         List<Company> companies = companyRepository.findAll(Sort.by("name"));
         return companies.stream().filter(company -> {
-            int companyX = company.getBuilding().getCoordinates().getX();
-            int companyY = company.getBuilding().getCoordinates().getY();
-            return Math.pow(companyX - xCoor, 2) + Math.pow(companyY - yCoor, 2) <= Math.pow(radius, 2);
+            int companyLatitude = company.getBuilding().getCoordinates().getLatitude();
+            int companyLongitude = company.getBuilding().getCoordinates().getLongitude();
+            return Math.pow(companyLatitude - latitude, 2) + Math.pow(companyLongitude - longitude, 2) <= Math.pow(radius, 2);
+        }).toList();
+    }
+    
+    @GetMapping("/in-rectangle-area")
+    @Cacheable("companies")
+    public List<Company> getAllInRectangleArea(@RequestParam int point1Latitude,
+                                               @RequestParam int point1Longitude,
+                                               @RequestParam int point2Latitude,
+                                               @RequestParam int point2Longitude) {
+        log.info("getAllInRectangleArea for point1 = ({}, {}), point2 = ({}, {})",
+                point1Latitude, point1Longitude, point2Latitude, point2Longitude);
+        return companyRepository.findAll(Sort.by("name")).stream().filter(company -> {
+            int companyLatitude = company.getBuilding().getCoordinates().getLatitude();
+            int companyLongitude = company.getBuilding().getCoordinates().getLongitude();
+            return companyLatitude >= point1Latitude && companyLatitude <= point2Latitude
+                    && companyLongitude >= point1Longitude && companyLongitude <= point2Longitude;
         }).toList();
     }
     
     @GetMapping("/by-name-and-heading")
     @Cacheable("companies")
     public Set<Company> getAllByNameAndHeading(@RequestParam String companyName,
-                                                @RequestParam String headingName) {
+                                               @RequestParam String headingName) {
         log.info("getAllByNameAndHeading for companyName = {} and headingName = {}", companyName, headingName);
         Heading selectedHeading = headingRepository.findByHeadingName(headingName);
         if (selectedHeading == null)

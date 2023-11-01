@@ -26,8 +26,8 @@ create table COMPANY_PHONE_NUMBER
 create table COORDINATES
 (
     BUILDING_ID INTEGER not null primary key,
-    X           INTEGER not null,
-    Y           INTEGER not null,
+    LATITUDE    INTEGER not null,
+    LONGITUDE   INTEGER not null,
     constraint FK_COORDINATES_BUILDING foreign key (BUILDING_ID) references BUILDING on delete cascade
 );
 
