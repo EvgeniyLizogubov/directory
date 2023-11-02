@@ -14,8 +14,6 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.NestedExceptionUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ProblemDetail;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.firewall.RequestRejectedException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -55,10 +53,8 @@ public class RestExceptionHandler {
             put(ValidationException.class, BAD_REQUEST);
             put(HttpRequestMethodNotSupportedException.class, BAD_REQUEST);
             put(MissingServletRequestParameterException.class, BAD_REQUEST);
-            put(RequestRejectedException.class, BAD_REQUEST);
             put(FileNotFoundException.class, BAD_REQUEST);
             put(AccessDeniedException.class, FORBIDDEN);
-            put(AuthenticationException.class, UNAUTHORIZED);
         }
     };
 

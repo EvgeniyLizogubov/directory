@@ -10,6 +10,7 @@ spring:
         default_batch_fetch_size: 20
         jdbc:
           batch_size: 20
+    open-in-view: false
   datasource:
     url: jdbc:h2:mem:directory
     #    tcp: jdbc:h2:tcp://localhost:9092/mem:directory
