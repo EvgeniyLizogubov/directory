@@ -1,70 +1,60 @@
 --liquibase formatted sql
 
 --changeset Lizogubov Eugeny:init_schema
-create table BUILDING
+CREATE TABLE building
 (
-    ID      INTEGER auto_increment primary key,
-    ADDRESS CHARACTER VARYING(255) not null unique
+    id        INTEGER AUTO_INCREMENT PRIMARY KEY,
+    address   CHARACTER VARYING(255) NOT NULL UNIQUE,
+    latitude  INTEGER                NOT NULL,
+    longitude INTEGER                NOT NULL,
+    CONSTRAINT uk_building UNIQUE (address, latitude, longitude)
 );
 
-create table COMPANY
+CREATE TABLE company
 (
-    BUILDING_ID INTEGER                not null,
-    ID          INTEGER auto_increment primary key,
-    NAME        CHARACTER VARYING(200) not null unique,
-    constraint UK_COMPANY unique (BUILDING_ID, NAME),
-    constraint FK_COMPANY_BUILDING foreign key (BUILDING_ID) references BUILDING
+    building_id INTEGER                NOT NULL,
+    id          INTEGER auto_increment PRIMARY KEY,
+    name        CHARACTER VARYING(200) NOT NULL UNIQUE,
+    CONSTRAINT uk_company UNIQUE (building_id, name),
+    CONSTRAINT fk_company_building FOREIGN KEY (building_id) REFERENCES building
 );
 
-create table COMPANY_PHONE_NUMBER
+CREATE TABLE company_phone_number
 (
-    COMPANY_ID   INTEGER not null,
-    PHONE_NUMBER CHARACTER VARYING(255),
-    constraint FK_COMPANY_PHONE_NUMBER foreign key (COMPANY_ID) references COMPANY on delete cascade
+    company_id   INTEGER NOT NULL,
+    phone_number CHARACTER VARYING(255),
+    CONSTRAINT fk_company_phone_number FOREIGN KEY (company_id) REFERENCES company ON DELETE CASCADE
 );
 
-create table COORDINATES
+CREATE TABLE heading
 (
-    BUILDING_ID INTEGER not null primary key,
-    LATITUDE    INTEGER not null,
-    LONGITUDE   INTEGER not null,
-    constraint FK_COORDINATES_BUILDING foreign key (BUILDING_ID) references BUILDING on delete cascade
+    id        INTEGER AUTO_INCREMENT PRIMARY KEY,
+    parent_id INTEGER,
+    name      CHARACTER VARYING(255) NOT NULL UNIQUE,
+    CONSTRAINT fk_heading FOREIGN KEY (parent_id) REFERENCES heading
 );
 
-create table HEADING
+CREATE TABLE heading_company
 (
-    HEADING_ID INTEGER auto_increment primary key,
-    PARENT_ID  INTEGER,
-    NAME       CHARACTER VARYING(255) not null unique,
-    constraint FK_HEADING foreign key (PARENT_ID) references HEADING
-);
-
-create table HEADING_COMPANY
-(
-    COMPANY_ID INTEGER not null,
-    HEADING_ID INTEGER not null,
-    constraint FK_HEADING_COMPANY foreign key (COMPANY_ID) references COMPANY,
-    constraint FK_COMPANY_HEADING foreign key (HEADING_ID) references HEADING
+    company_id INTEGER NOT NULL,
+    heading_id INTEGER NOT NULL,
+    CONSTRAINT fk_heading_company FOREIGN KEY (company_id) REFERENCES company,
+    CONSTRAINT fk_company_heading FOREIGN KEY (heading_id) REFERENCES heading
 );
 
 --changeset Lizogubov Eugeny:populate_data
-INSERT INTO BUILDING (ADDRESS)
-VALUES ('ул. Пушкина, д. Колотушкина'),
-       ('ул. Ленина, д. 666'),
-       ('ул. Школьная, д. 13');
+INSERT INTO building (address, latitude, longitude)
+VALUES ('ул. Пушкина, д. Колотушкина', 111, 111),
+       ('ул. Ленина, д. 666', 222, 222),
+       ('ул. Школьная, д. 13', 333, 333);
 
-INSERT INTO COORDINATES
-VALUES (1, 111, 111),
-       (2, 222, 222),
-       (3, 333, 333);
-
-INSERT INTO COMPANY (BUILDING_ID, NAME)
+INSERT INTO company (building_id, name)
 VALUES (1, 'Coca-cola'),
        (2, 'Pepsi'),
        (3, 'Nestle'),
        (2, 'Ochakovo');
 
-INSERT INTO COMPANY_PHONE_NUMBER
+INSERT INTO company_phone_number
 VALUES (1, '123-123-123'),
        (1, '456-456-456'),
        (2, '321-321-321'),
@@ -72,7 +62,7 @@ VALUES (1, '123-123-123'),
        (3, '789-789-789'),
        (4, '777-777-777');
 
-INSERT INTO HEADING (PARENT_ID, NAME)
+INSERT INTO heading (parent_id, name)
 VALUES (null, 'Напитки'), /*1*/
        (1, 'Газированные'), /*2*/
        (2, 'Квасы'), /*3*/
@@ -82,12 +72,12 @@ VALUES (null, 'Напитки'), /*1*/
        (1, 'Полуфабрикаты оптом'), /*7*/
        (1, 'Мясная продукция'), /*8*/
        (null, 'Автомобили'), /*9*/
-       (4, 'Грузовые'), /*10*/
-       (4, 'Легковые'), /*11*/
-       (6, 'Запчасти для подвески'), /*12*/
-       (6, 'Шины/Диски'); /*13*/
+       (9, 'Грузовые'), /*10*/
+       (9, 'Легковые'), /*11*/
+       (11, 'Запчасти для подвески'), /*12*/
+       (11, 'Шины/Диски'); /*13*/
 
-INSERT INTO HEADING_COMPANY
+INSERT INTO heading_company
 VALUES (1, 2),
        (2, 2),
        (3, 6),

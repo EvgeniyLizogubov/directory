@@ -1,13 +1,16 @@
 package com.github.evgenylizogubov.directory.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
@@ -16,12 +19,8 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
-public class Building {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    
+@SuperBuilder
+public class Building extends AbstractBaseEntity {
     @Column(name = "address", nullable = false, unique = true, updatable = false)
     @NotBlank
     private String address;
@@ -30,14 +29,11 @@ public class Building {
     @JsonIgnore
     private List<Company> companies;
     
-    @OneToOne(mappedBy = "building")
-    @PrimaryKeyJoinColumn
+    @Column(name = "latitude", nullable = false)
     @NotNull
-    private Coordinates coordinates;
+    private Integer latitude;
     
-    public Building(Integer id, String address, Coordinates coordinates) {
-        this.id = id;
-        this.address = address;
-        this.coordinates = coordinates;
-    }
+    @Column(name = "longitude", nullable = false)
+    @NotNull
+    private Integer longitude;
 }

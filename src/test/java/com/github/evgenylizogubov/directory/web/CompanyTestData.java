@@ -22,8 +22,12 @@ public class CompanyTestData {
     public static final Heading dead = new Heading(5, "Неживые", kvasi);
     public static final Heading food = new Heading(6, "Еда", null);
     
-    public static final Company coca = new Company(COCA_ID, "Coca-cola", Set.of("123-123-123", "456-456-456"), building1, List.of(gaz, napitki));
-    public static final Company pepsi = new Company(PEPSI_ID, "Pepsi", Set.of("321-321-321", "654-654-654"), building2, List.of(gaz));
-    public static final Company nestle = new Company(NESTLE_ID, "Nestle", Set.of("789-789-789"), building3, List.of(food));
-    public static final Company ochakovo = new Company(OCHAKOVO_ID, "Ochakovo", Set.of("777-777-777"), building2, List.of(kvasi, dead));
+    public static final Company coca = Company.builder().id(COCA_ID).name("Coca-cola").phoneNumbers(Set.of("123-123-123", "456-456-456"))
+            .building(building1).headings(List.of(gaz, napitki)).build();
+    public static final Company pepsi = Company.builder().id(PEPSI_ID).name("Pepsi").phoneNumbers(Set.of("321-321-321", "654-654-654"))
+            .building(building2).headings(List.of(gaz)).build();
+    public static final Company nestle = Company.builder().id(NESTLE_ID).name("Nestle").phoneNumbers(Set.of("789-789-789"))
+            .building(building3).headings(List.of(food)).build();
+    public static final Company ochakovo = Company.builder().id(OCHAKOVO_ID).name("Ochakovo").phoneNumbers(Set.of("777-777-777"))
+            .building(building2).headings(List.of(kvasi, dead)).build();
 }

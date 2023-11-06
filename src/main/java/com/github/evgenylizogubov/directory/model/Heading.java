@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,13 +15,7 @@ import java.util.List;
 @Setter
 @Getter
 @NoArgsConstructor
-@ToString
-public class Heading {
-    @Id
-    @Column(name = "heading_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    
+public class Heading extends AbstractBaseEntity {
     @Column(name = "name", nullable = false, unique = true)
     @NotBlank
     private String name;

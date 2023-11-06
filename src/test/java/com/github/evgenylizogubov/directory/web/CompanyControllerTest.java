@@ -48,7 +48,7 @@ public class CompanyControllerTest extends AbstractControllerTest {
     
     @Test
     void getAllByHeading() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + "heading")
+        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + "by-heading")
                 .param("heading", napitki.getName()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -58,8 +58,8 @@ public class CompanyControllerTest extends AbstractControllerTest {
     @Test
     void getAllInCircleArea() throws Exception {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("latitude", building1.getCoordinates().getLatitude().toString());
-        params.add("longitude", building1.getCoordinates().getLongitude().toString());
+        params.add("latitude", building1.getLatitude().toString());
+        params.add("longitude", building1.getLongitude().toString());
         params.add("radius", "170");
         
         perform(MockMvcRequestBuilders.get(REST_URL_SLASH + "in-circle-area")
@@ -72,10 +72,10 @@ public class CompanyControllerTest extends AbstractControllerTest {
     @Test
     void getAllInRectangleArea() throws Exception {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("point1Latitude", String.valueOf(building2.getCoordinates().getLatitude() - 1));
-        params.add("point1Longitude", String.valueOf(building2.getCoordinates().getLongitude() - 1));
-        params.add("point2Latitude", String.valueOf(building2.getCoordinates().getLatitude() + 1));
-        params.add("point2Longitude", String.valueOf(building2.getCoordinates().getLongitude() + 1));
+        params.add("point1Latitude", String.valueOf(building2.getLatitude() - 1));
+        params.add("point1Longitude", String.valueOf(building2.getLongitude() - 1));
+        params.add("point2Latitude", String.valueOf(building2.getLatitude() + 1));
+        params.add("point2Longitude", String.valueOf(building2.getLongitude() + 1));
         
         perform(MockMvcRequestBuilders.get(REST_URL_SLASH + "in-rectangle-area")
                 .params(params))

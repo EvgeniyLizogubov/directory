@@ -46,7 +46,7 @@ public class CompanyController {
         return companyRepository.findAllByBuildingId(buildingId);
     }
     
-    @GetMapping("/heading")
+    @GetMapping("/by-heading")
     @Cacheable("companies")
     public List<Company> getAllByHeading(@RequestParam String heading) {
         log.info("getAllByHeading for {}", heading);
@@ -61,8 +61,8 @@ public class CompanyController {
         log.info("getAllInArea for x = {}, y = {}, radius = {}", latitude, longitude, radius);
         List<Company> companies = companyRepository.findAll(Sort.by("name"));
         return companies.stream().filter(company -> {
-            int companyLatitude = company.getBuilding().getCoordinates().getLatitude();
-            int companyLongitude = company.getBuilding().getCoordinates().getLongitude();
+            int companyLatitude = company.getBuilding().getLatitude();
+            int companyLongitude = company.getBuilding().getLongitude();
             return Math.pow(companyLatitude - latitude, 2) + Math.pow(companyLongitude - longitude, 2) <= Math.pow(radius, 2);
         }).toList();
     }
@@ -76,8 +76,8 @@ public class CompanyController {
         log.info("getAllInRectangleArea for point1 = ({}, {}), point2 = ({}, {})",
                 point1Latitude, point1Longitude, point2Latitude, point2Longitude);
         return companyRepository.findAll(Sort.by("name")).stream().filter(company -> {
-            int companyLatitude = company.getBuilding().getCoordinates().getLatitude();
-            int companyLongitude = company.getBuilding().getCoordinates().getLongitude();
+            int companyLatitude = company.getBuilding().getLatitude();
+            int companyLongitude = company.getBuilding().getLongitude();
             return companyLatitude >= point1Latitude && companyLatitude <= point2Latitude
                     && companyLongitude >= point1Longitude && companyLongitude <= point2Longitude;
         }).toList();
