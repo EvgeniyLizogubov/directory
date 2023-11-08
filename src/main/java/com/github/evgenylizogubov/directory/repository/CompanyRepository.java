@@ -17,4 +17,20 @@ public interface CompanyRepository extends JpaRepository<Company, Integer> {
     
     @Query("SELECT c FROM Company c WHERE c.name LIKE %:name%")
     List<Company> findByNameLike(String name);
+    
+    @Query("""
+                SELECT c
+                FROM Company c JOIN c.building b
+                WHERE FUNCTION('POWER', b.latitude - :latitude, 2) + FUNCTION('POWER', b.longitude - :longitude, 2) <= FUNCTION('POWER', :radius, 2)
+                ORDER BY c.name
+            """)
+    List<Company> findAllInCircleArea(int latitude, int longitude, int radius);
+    
+    @Query("""
+                SELECT c
+                FROM Company c JOIN c.building b
+                WHERE b.latitude >= :point1Latitude AND b.latitude <= :point2Latitude AND b.longitude >= :point1Longitude AND b.longitude <= :point2Longitude
+                ORDER BY c.name
+            """)
+    List<Company> FindAllInRectangleArea(int point1Latitude, int point1Longitude, int point2Latitude, int point2Longitude);
 }

@@ -5,10 +5,9 @@ import com.github.evgenylizogubov.directory.model.Company;
 import com.github.evgenylizogubov.directory.model.Heading;
 import com.github.evgenylizogubov.directory.repository.CompanyRepository;
 import com.github.evgenylizogubov.directory.repository.HeadingRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +18,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping(value = "api/company", produces = MediaType.APPLICATION_JSON_VALUE)
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 public class CompanyController {
     private final CompanyRepository companyRepository;
@@ -40,51 +39,42 @@ public class CompanyController {
     }
     
     @GetMapping("/by-building-id")
-    @Cacheable("companies")
+    @Cacheable("companiesByBuildingId")
     public List<Company> getAllByBuildingId(@RequestParam Integer buildingId) {
         log.info("getAllByBuildingId for buildingId = {}", buildingId);
         return companyRepository.findAllByBuildingId(buildingId);
     }
     
     @GetMapping("/by-heading")
-    @Cacheable("companies")
+    @Cacheable("companiesByHeading")
     public List<Company> getAllByHeading(@RequestParam String heading) {
         log.info("getAllByHeading for {}", heading);
         return companyRepository.findAllByHeading(heading);
     }
     
     @GetMapping("/in-circle-area")
-    @Cacheable("companies")
+    @Cacheable("companiesInCircleArea")
     public List<Company> getAllInCircleArea(@RequestParam int latitude,
                                             @RequestParam int longitude,
                                             @RequestParam int radius) {
         log.info("getAllInArea for x = {}, y = {}, radius = {}", latitude, longitude, radius);
-        List<Company> companies = companyRepository.findAll(Sort.by("name"));
-        return companies.stream().filter(company -> {
-            int companyLatitude = company.getBuilding().getLatitude();
-            int companyLongitude = company.getBuilding().getLongitude();
-            return Math.pow(companyLatitude - latitude, 2) + Math.pow(companyLongitude - longitude, 2) <= Math.pow(radius, 2);
-        }).toList();
+        return companyRepository.findAllInCircleArea(latitude, longitude, radius);
     }
     
     @GetMapping("/in-rectangle-area")
-    @Cacheable("companies")
+    @Cacheable("companiesInRectangleArea")
     public List<Company> getAllInRectangleArea(@RequestParam int point1Latitude,
                                                @RequestParam int point1Longitude,
                                                @RequestParam int point2Latitude,
                                                @RequestParam int point2Longitude) {
         log.info("getAllInRectangleArea for point1 = ({}, {}), point2 = ({}, {})",
                 point1Latitude, point1Longitude, point2Latitude, point2Longitude);
-        return companyRepository.findAll(Sort.by("name")).stream().filter(company -> {
-            int companyLatitude = company.getBuilding().getLatitude();
-            int companyLongitude = company.getBuilding().getLongitude();
-            return companyLatitude >= point1Latitude && companyLatitude <= point2Latitude
-                    && companyLongitude >= point1Longitude && companyLongitude <= point2Longitude;
-        }).toList();
+        return companyRepository.FindAllInRectangleArea(point1Latitude, point1Longitude, point2Latitude, point2Longitude);
     }
     
     @GetMapping("/by-name-and-heading")
-    @Cacheable("companies")
+    @Cacheable("companiesByNameAndHeading")
+//    @Transactional
     public Set<Company> getAllByNameAndHeading(@RequestParam String companyName,
                                                @RequestParam String headingName) {
         log.info("getAllByNameAndHeading for companyName = {} and headingName = {}", companyName, headingName);

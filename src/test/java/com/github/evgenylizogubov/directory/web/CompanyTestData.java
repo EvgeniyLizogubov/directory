@@ -9,7 +9,7 @@ import java.util.Set;
 import static com.github.evgenylizogubov.directory.web.BuildingTestData.*;
 
 public class CompanyTestData {
-    public static final MatcherFactory.Matcher<Company> COMPANY_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Company.class, "headings.parent");
+    public static final MatcherFactory.Matcher<Company> COMPANY_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Company.class, "headings.parent", "building");
     
     public static final int COCA_ID = 1;
     public static final int PEPSI_ID = 2;
