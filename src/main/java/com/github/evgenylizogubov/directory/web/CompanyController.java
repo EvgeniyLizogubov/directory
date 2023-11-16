@@ -1,10 +1,10 @@
 package com.github.evgenylizogubov.directory.web;
 
-import com.github.evgenylizogubov.directory.error.NotFoundException;
 import com.github.evgenylizogubov.directory.model.Company;
 import com.github.evgenylizogubov.directory.model.Heading;
 import com.github.evgenylizogubov.directory.repository.CompanyRepository;
 import com.github.evgenylizogubov.directory.repository.HeadingRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
@@ -69,21 +69,18 @@ public class CompanyController {
                                                @RequestParam int point2Longitude) {
         log.info("getAllInRectangleArea for point1 = ({}, {}), point2 = ({}, {})",
                 point1Latitude, point1Longitude, point2Latitude, point2Longitude);
-        return companyRepository.FindAllInRectangleArea(point1Latitude, point1Longitude, point2Latitude, point2Longitude);
+        return companyRepository.findAllInRectangleArea(point1Latitude, point1Longitude, point2Latitude, point2Longitude);
     }
     
     @GetMapping("/by-name-and-heading")
     @Cacheable("companiesByNameAndHeading")
-//    @Transactional
+    @Transactional
     public Set<Company> getAllByNameAndHeading(@RequestParam String companyName,
                                                @RequestParam String headingName) {
         log.info("getAllByNameAndHeading for companyName = {} and headingName = {}", companyName, headingName);
-        Heading selectedHeading = headingRepository.findByHeadingName(headingName);
-        if (selectedHeading == null)
-            throw new NotFoundException("Heading \"" + headingName + "\" not found");
-        
-        Set<Company> result = new HashSet<>(selectedHeading.getCompanies().stream().filter(company -> company.getName().contains(companyName)).toList());
-        selectedHeading.getAllChildren().forEach(heading -> heading.getCompanies().forEach(company -> {
+        List<Heading> headingsWithChildren = headingRepository.findByHeadingName(headingName);
+        Set<Company> result = new HashSet<>();
+        headingsWithChildren.forEach(heading -> heading.getCompanies().forEach(company -> {
             if (company.getName().contains(companyName)) {
                 result.add(company);
             }

@@ -28,16 +28,23 @@ CREATE TABLE company_phone_number
 
 CREATE TABLE heading
 (
-    id        INTEGER AUTO_INCREMENT PRIMARY KEY,
-    parent_id INTEGER,
-    name      CHARACTER VARYING(255) NOT NULL UNIQUE,
-    CONSTRAINT fk_heading FOREIGN KEY (parent_id) REFERENCES heading
+    id   INTEGER AUTO_INCREMENT PRIMARY KEY,
+    name CHARACTER VARYING(255) NOT NULL UNIQUE
+);
+
+CREATE TABLE tree_path
+(
+    ancestor   INTEGER NOT NULL,
+    descendant INTEGER NOT NULL,
+    CONSTRAINT tree_path_pkey PRIMARY KEY (ancestor, descendant),
+    CONSTRAINT fk_ancestor FOREIGN KEY (ancestor) REFERENCES heading,
+    CONSTRAINT fk_descendant FOREIGN KEY (descendant) REFERENCES heading
 );
 
 CREATE TABLE heading_company
 (
-    company_id INTEGER NOT NULL,
     heading_id INTEGER NOT NULL,
+    company_id INTEGER NOT NULL,
     CONSTRAINT fk_heading_company FOREIGN KEY (company_id) REFERENCES company,
     CONSTRAINT fk_company_heading FOREIGN KEY (heading_id) REFERENCES heading
 );
@@ -62,26 +69,58 @@ VALUES (1, '123-123-123'),
        (3, '789-789-789'),
        (4, '777-777-777');
 
-INSERT INTO heading (parent_id, name)
-VALUES (null, 'Напитки'), /*1*/
-       (1, 'Газированные'), /*2*/
-       (2, 'Квасы'), /*3*/
-       (3, 'Живые'), /*4*/
-       (3, 'Неживые'), /*5*/
-       (null, 'Еда'), /*6*/
-       (1, 'Полуфабрикаты оптом'), /*7*/
-       (1, 'Мясная продукция'), /*8*/
-       (null, 'Автомобили'), /*9*/
-       (9, 'Грузовые'), /*10*/
-       (9, 'Легковые'), /*11*/
-       (11, 'Запчасти для подвески'), /*12*/
-       (11, 'Шины/Диски'); /*13*/
+INSERT INTO heading (name)
+VALUES ('Напитки'), /*1*/
+       ('Газированные'), /*2*/
+       ('Квасы'), /*3*/
+       ('Живые'), /*4*/
+       ('Неживые'), /*5*/
+       ('Еда'), /*6*/
+       ('Полуфабрикаты оптом'), /*7*/
+       ('Мясная продукция'), /*8*/
+       ('Автомобили'), /*9*/
+       ('Грузовые'), /*10*/
+       ('Легковые'), /*11*/
+       ('Запчасти для подвески'), /*12*/
+       ('Шины/Диски'); /*13*/
+
+INSERT INTO tree_path
+VALUES (1, 1),
+       (1, 2),
+       (1, 3),
+       (1, 4),
+       (1, 5),
+       (2, 2),
+       (2, 3),
+       (2, 4),
+       (2, 5),
+       (3, 3),
+       (3, 4),
+       (3, 5),
+       (4, 4),
+       (5, 5),
+       (6, 6),
+       (6, 7),
+       (6, 8),
+       (7, 7),
+       (8, 8),
+       (9, 9),
+       (9, 10),
+       (9, 11),
+       (9, 12),
+       (9, 13),
+       (10, 10),
+       (11, 11),
+       (11, 12),
+       (11, 13),
+       (12, 12),
+       (13, 13);
 
 INSERT INTO heading_company
-VALUES (1, 2),
+VALUES (2, 1),
        (2, 2),
-       (3, 6),
-       (4, 3),
-       (4, 5),
+       (6, 3),
+       (3, 4),
+       (5, 4),
        (1, 1);
 

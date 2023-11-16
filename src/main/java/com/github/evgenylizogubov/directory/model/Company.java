@@ -38,7 +38,7 @@ public class Company extends AbstractBaseEntity {
     @NotNull
     private Building building;
     
-    @ManyToMany(mappedBy = "companies", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "companies", fetch = FetchType.LAZY)
     @NotNull
     private List<Heading> headings;
 }

@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,14 +22,15 @@ public class Heading extends AbstractBaseEntity {
     @NotBlank
     private String name;
     
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "parent_id")
+//    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "descendant")
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+//    @JsonIgnore
+//    private List<TreePath> parents = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "ancestor")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
-    private Heading parent;
-    
-    @OneToMany(mappedBy = "parent")
-    @JsonIgnore
-    private List<Heading> children;
+    private List<TreePath> children = new ArrayList<>();
     
     @ManyToMany
     @JoinTable(
@@ -38,25 +41,8 @@ public class Heading extends AbstractBaseEntity {
     @JsonIgnore
     private List<Company> companies;
     
-    @JsonIgnore
-    public List<Heading> getAllChildren() {
-        return getAllChildren(this);
-    }
-
-    private List<Heading> getAllChildren(Heading heading) {
-        List<Heading> allChildren = new ArrayList<>();
-
-        for (Heading child : heading.getChildren()) {
-            allChildren.add(child);
-            allChildren.addAll(getAllChildren(child));
-        }
-
-        return allChildren;
-    }
-    
-    public Heading(Integer id, String name, Heading parent) {
+    public Heading(int id, String name) {
         this.id = id;
         this.name = name;
-        this.parent = parent;
     }
 }

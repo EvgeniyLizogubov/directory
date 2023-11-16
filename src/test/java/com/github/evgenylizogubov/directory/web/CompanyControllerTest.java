@@ -93,12 +93,4 @@ public class CompanyControllerTest extends AbstractControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(COMPANY_MATCHER.contentJson(List.of(ochakovo)));
     }
-    
-    @Test
-    void getAllByNameAndHeadingNotFount() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + "by-name-and-heading")
-                .param("companyName", ochakovo.getName())
-                .param("headingName", "NotFound"))
-                .andExpect(status().isNotFound());
-    }
 }
