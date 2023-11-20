@@ -1,5 +1,6 @@
 package com.github.evgenylizogubov.directory.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -36,9 +37,11 @@ public class Company extends AbstractBaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "building_id")
     @NotNull
+    @JsonIgnore
     private Building building;
     
     @ManyToMany(mappedBy = "companies", fetch = FetchType.LAZY)
     @NotNull
+    @JsonIgnore
     private List<Heading> headings;
 }

@@ -45,6 +45,7 @@ CREATE TABLE heading_company
 (
     heading_id INTEGER NOT NULL,
     company_id INTEGER NOT NULL,
+    CONSTRAINT uk_heading_company UNIQUE (heading_id, company_id),
     CONSTRAINT fk_heading_company FOREIGN KEY (company_id) REFERENCES company,
     CONSTRAINT fk_company_heading FOREIGN KEY (heading_id) REFERENCES heading
 );

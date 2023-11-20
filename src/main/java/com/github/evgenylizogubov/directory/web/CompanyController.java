@@ -4,7 +4,6 @@ import com.github.evgenylizogubov.directory.model.Company;
 import com.github.evgenylizogubov.directory.model.Heading;
 import com.github.evgenylizogubov.directory.repository.CompanyRepository;
 import com.github.evgenylizogubov.directory.repository.HeadingRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
@@ -74,17 +73,12 @@ public class CompanyController {
     
     @GetMapping("/by-name-and-heading")
     @Cacheable("companiesByNameAndHeading")
-    @Transactional
     public Set<Company> getAllByNameAndHeading(@RequestParam String companyName,
                                                @RequestParam String headingName) {
         log.info("getAllByNameAndHeading for companyName = {} and headingName = {}", companyName, headingName);
-        List<Heading> headingsWithChildren = headingRepository.findByHeadingName(headingName);
+        List<Heading> headingsWithChildren = headingRepository.findByHeadingNameAndCompanyName(headingName, companyName);
         Set<Company> result = new HashSet<>();
-        headingsWithChildren.forEach(heading -> heading.getCompanies().forEach(company -> {
-            if (company.getName().contains(companyName)) {
-                result.add(company);
-            }
-        }));
+        headingsWithChildren.forEach(heading -> result.addAll(heading.getCompanies()));
         return result;
     }
 }

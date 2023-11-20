@@ -13,11 +13,13 @@ public interface HeadingRepository extends JpaRepository<Heading, Integer> {
             SELECT h
             FROM Heading h
                 JOIN TreePath t ON h.id = t.descendant.id
+                JOIN FETCH h.companies c
+                JOIN FETCH c.phoneNumbers
             WHERE t.ancestor.id = (
                 SELECT id
                 FROM Heading
                 WHERE name = :headingName
-            )
+            ) AND c.name LIKE %:companyName%
                         """)
-    List<Heading> findByHeadingName(String headingName);
+    List<Heading> findByHeadingNameAndCompanyName(String headingName, String companyName);
 }

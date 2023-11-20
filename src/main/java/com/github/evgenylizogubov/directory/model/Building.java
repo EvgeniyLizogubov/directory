@@ -12,7 +12,7 @@ import lombok.experimental.SuperBuilder;
 import java.util.List;
 
 @Entity
-@Table(name = "building")
+@Table(name = "building", uniqueConstraints = @UniqueConstraint(columnNames = {"address", "latitude", "longitude"}, name = "uk_building"))
 @Getter
 @Setter
 @NoArgsConstructor
