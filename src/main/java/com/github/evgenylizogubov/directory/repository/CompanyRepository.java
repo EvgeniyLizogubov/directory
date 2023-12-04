@@ -29,8 +29,8 @@ public interface CompanyRepository extends JpaRepository<Company, Integer> {
     @Query("""
             SELECT c
             FROM Company c JOIN c.building b JOIN FETCH c.phoneNumbers
-            WHERE b.latitude >= :point1Latitude AND b.latitude <= :point2Latitude AND b.longitude >= :point1Longitude AND b.longitude <= :point2Longitude
+            WHERE b.latitude >= :latitude - :radius AND b.latitude <= :latitude + :radius AND b.longitude >= :longitude - :radius AND b.longitude <= :longitude + :radius
             ORDER BY c.name
             """)
-    List<Company> findAllInRectangleArea(int point1Latitude, int point1Longitude, int point2Latitude, int point2Longitude);
+    List<Company> findAllInRectangleArea(int latitude, int longitude, int radius);
 }
