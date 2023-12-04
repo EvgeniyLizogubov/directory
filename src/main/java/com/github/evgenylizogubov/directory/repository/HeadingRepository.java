@@ -22,4 +22,19 @@ public interface HeadingRepository extends JpaRepository<Heading, Integer> {
             ) AND c.name LIKE %:companyName%
                         """)
     List<Heading> findByHeadingNameAndCompanyName(String headingName, String companyName);
+    
+    @Query("""
+            SELECT h
+            FROM Heading h
+                JOIN TreePath t ON h.id = t.ancestor.id AND t.level = 0
+            """)
+    List<Heading> findAllRoot();
+    
+    @Query("""
+            SELECT h
+            FROM Heading h
+                JOIN TreePath t ON h.id = t.descendant.id
+            WHERE t.ancestor.id = :id AND t.ancestor <> t.descendant
+            """)
+    List<Heading> findAllChildren(int id);
 }

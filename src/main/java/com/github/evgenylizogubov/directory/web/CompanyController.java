@@ -66,17 +66,6 @@ public class CompanyController {
         return companyRepository.findAllInRectangleArea(latitude, longitude, radius);
     }
     
-//    @GetMapping("/in-rectangle-area")
-//    @Cacheable("companiesInRectangleArea")
-//    public List<Company> getAllInRectangleArea(@RequestParam int point1Latitude,
-//                                               @RequestParam int point1Longitude,
-//                                               @RequestParam int point2Latitude,
-//                                               @RequestParam int point2Longitude) {
-//        log.info("getAllInRectangleArea for point1 = ({}, {}), point2 = ({}, {})",
-//                point1Latitude, point1Longitude, point2Latitude, point2Longitude);
-//        return companyRepository.findAllInRectangleArea(point1Latitude, point1Longitude, point2Latitude, point2Longitude);
-//    }
-    
     @GetMapping("/by-name-and-heading")
     @Cacheable("companiesByNameAndHeading")
     public Set<Company> getAllByNameAndHeading(@RequestParam String companyName,

@@ -23,4 +23,7 @@ public class TreePath implements Serializable {
     @ManyToOne(targetEntity = Heading.class)
     @JoinColumn(name = "descendant", nullable = false, foreignKey = @ForeignKey(name = "fk_descendant"))
     private Heading descendant;
+    
+    @Column(name = "level")
+    private int level;
 }

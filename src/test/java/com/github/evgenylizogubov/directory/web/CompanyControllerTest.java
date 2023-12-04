@@ -11,6 +11,7 @@ import java.util.List;
 
 import static com.github.evgenylizogubov.directory.web.BuildingTestData.*;
 import static com.github.evgenylizogubov.directory.web.CompanyTestData.*;
+import static com.github.evgenylizogubov.directory.web.HeadingTestData.napitki;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

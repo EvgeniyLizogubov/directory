@@ -18,7 +18,7 @@ spring:
     password:
 
   cache:
-    cache-names: companies, companiesByBuildingId, companiesByHeading, companiesInArea, companiesByNameAndHeading
+    cache-names: companies, companiesByBuildingId, companiesByHeading, companiesInArea, companiesByNameAndHeading, headingAllRoots, headingAllChildrenByParentId
     caffeine.spec: maximumSize=5000,expireAfterAccess=600s
 
   liquibase:
