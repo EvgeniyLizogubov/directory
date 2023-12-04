@@ -4,11 +4,13 @@ import com.github.evgenylizogubov.directory.model.Building;
 import com.github.evgenylizogubov.directory.repository.BuildingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -24,5 +26,12 @@ public class BuildingController {
     public List<Building> getAll(@PageableDefault(sort = {"address"}) Pageable pageable) {
         log.info("getAll");
         return repository.findAll(pageable).getContent();
+    }
+    
+    @GetMapping("/by-address")
+    @Cacheable("buildingsByAddress")
+    public List<Building> getAllByAddress(@RequestParam String address) {
+        log.info("get buildings by name:{}", address);
+        return repository.findAllByAddressLike(address);
     }
 }

@@ -19,7 +19,7 @@ public interface HeadingRepository extends JpaRepository<Heading, Integer> {
                 SELECT id
                 FROM Heading
                 WHERE name = :headingName
-            ) AND c.name LIKE %:companyName%
+            ) AND LOWER(c.name) LIKE LOWER(CONCAT('%', :companyName, '%'))
                         """)
     List<Heading> findByHeadingNameAndCompanyName(String headingName, String companyName);
     

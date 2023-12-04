@@ -11,7 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class HeadingControllerTest extends AbstractControllerTest {
     private final String REST_URL = "/api/heading";
-    private final String REST_URL_SLASH = "/api/heading/";
+    private final String REST_URL_SLASH = REST_URL + "/";
     
     @Test
     void getAllRoots() throws Exception {

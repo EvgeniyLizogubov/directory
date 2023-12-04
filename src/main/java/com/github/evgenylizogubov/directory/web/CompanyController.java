@@ -24,14 +24,14 @@ public class CompanyController {
     private final HeadingRepository headingRepository;
     
     @GetMapping("/{id}")
-    @Cacheable("companies")
+    @Cacheable("companiesByName")
     public ResponseEntity<Company> get(@PathVariable int id) {
         log.info("get id = {}", id);
         return ResponseEntity.of(companyRepository.findById(id));
     }
     
     @GetMapping("/by-name")
-    @Cacheable("companies")
+    @Cacheable("companiesByName")
     public List<Company> getByNameLike(@RequestParam String name) {
         log.info("getByName for name = {}", name);
         return companyRepository.findByNameLike(name);
