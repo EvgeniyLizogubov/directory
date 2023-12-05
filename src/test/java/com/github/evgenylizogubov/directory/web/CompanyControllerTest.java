@@ -29,7 +29,7 @@ public class CompanyControllerTest extends AbstractControllerTest {
     }
     
     @Test
-    void getByNameLike() throws Exception {
+    void getByName() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL_SLASH + "by-name")
                 .param("name", coca.getName()))
                 .andExpect(status().isOk())
@@ -50,7 +50,7 @@ public class CompanyControllerTest extends AbstractControllerTest {
     @Test
     void getAllByHeading() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL_SLASH + "by-heading")
-                .param("heading", napitki.getName()))
+                .param("headingName", napitki.getName()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(COMPANY_MATCHER.contentJson(List.of(coca)));

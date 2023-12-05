@@ -12,8 +12,8 @@ public interface CompanyRepository extends JpaRepository<Company, Integer> {
     @Query("SELECT c FROM Company c JOIN FETCH c.phoneNumbers WHERE c.building.id=:buildingId ORDER BY c.name ASC")
     List<Company> findAllByBuildingId(Integer buildingId);
     
-    @Query("SELECT c FROM Company c JOIN c.headings h JOIN FETCH c.phoneNumbers WHERE h.name=:headingName ORDER BY c.name ASC")
-    List<Company> findAllByHeading(String headingName);
+    @Query("SELECT c FROM Company c JOIN c.headings h JOIN FETCH c.phoneNumbers WHERE LOWER(h.name) = LOWER(:headingName) ORDER BY c.name ASC")
+    List<Company> findAllByHeadingName(String headingName);
     
     @Query("SELECT c FROM Company c JOIN FETCH c.phoneNumbers WHERE LOWER(c.name) LIKE LOWER(CONCAT('%', :name, '%'))")
     List<Company> findByNameLike(String name);
