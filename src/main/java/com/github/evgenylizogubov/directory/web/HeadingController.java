@@ -2,6 +2,7 @@ package com.github.evgenylizogubov.directory.web;
 
 import com.github.evgenylizogubov.directory.model.Heading;
 import com.github.evgenylizogubov.directory.repository.HeadingRepository;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
@@ -22,6 +23,7 @@ public class HeadingController {
     
     @GetMapping
     @Cacheable("headingAllRoots")
+    @Operation(summary = "Get all root headings")
     public List<Heading> getAllRoots() {
         log.info("getAllRoots");
         return repository.findAllRoot();
@@ -29,6 +31,7 @@ public class HeadingController {
     
     @GetMapping("/{id}")
     @Cacheable("headingAllChildrenByParentId")
+    @Operation(summary = "Get all children headings by parent heading id")
     public List<Heading> getAllChildrenByParentId(@PathVariable int id) {
         log.info("getAllChildren for Heading with id:{}", id);
         return repository.findAllChildren(id);

@@ -2,6 +2,7 @@ package com.github.evgenylizogubov.directory.web;
 
 import com.github.evgenylizogubov.directory.model.Building;
 import com.github.evgenylizogubov.directory.repository.BuildingRepository;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
@@ -23,6 +24,7 @@ public class BuildingController {
     private final BuildingRepository repository;
     
     @GetMapping
+    @Operation(summary = "Get all buildings pageable and sorting by address")
     public List<Building> getAll(@PageableDefault(sort = {"address"}) Pageable pageable) {
         log.info("getAll");
         return repository.findAll(pageable).getContent();
@@ -30,6 +32,7 @@ public class BuildingController {
     
     @GetMapping("/by-address")
     @Cacheable("buildingsByAddress")
+    @Operation(summary = "Get all buildings with like address")
     public List<Building> getAllByAddress(@RequestParam String address) {
         log.info("get buildings by name:{}", address);
         return repository.findAllByAddressLike(address);
