@@ -24,8 +24,8 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 @EnableCaching
 @Slf4j
 public class AppConfig {
-    @Bean(initMethod = "start", destroyMethod = "stop")
     @Profile("!test")
+    @Bean(initMethod = "start", destroyMethod = "stop")
     Server h2Server() throws SQLException {
         log.info("Start H2 tcp server");
         return Server.createTcpServer("-tcp", "-tcpAllowOthers", "-tcpPort", "9092");
