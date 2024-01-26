@@ -40,4 +40,4 @@ server:
       force: true
   forward-headers-strategy: framework
 
-springdoc.swagger-ui.path: /
+springdoc.swagger-ui.path: /doc
