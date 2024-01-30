@@ -39,4 +39,4 @@
 ### Стэк:
 Spring Boot, Spring MVC, Spring Data JPA, Liquibase, H2, Lombok, Jackson.
 
-### [Документация](http://185.244.210.11:8080)
+### [Документация](http://5.45.70.21:8080)
